@@ -50,17 +50,13 @@ The project implements a Salesforce-native application that allows employees to 
 
 A short walkthrough of the final user experience: navigating the Skill Enhancement Tracker app, reviewing providers/programs/courses/sessions, signing up for a session, checking participant status, and viewing reports/dashboard metrics.
 
-> Replace `YOUTUBE_VIDEO_ID` after uploading the video as unlisted.
-
-[![Functional Demo](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID)
+[![Functional Demo](https://img.youtube.com/vi/zTYJ4bVw6GY/maxresdefault.jpg)](https://www.youtube.com/watch?v=zTYJ4bVw6GY)
 
 ### Technical Walkthrough
 
 A technical explanation of the data model, automation strategy, approval process, reporting decisions, Lightning pages, security model, and Apex seat recalculation / participant integrity logic.
 
-> Replace `YOUTUBE_VIDEO_ID` after uploading the video as unlisted.
-
-[![Technical Walkthrough](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID)
+[![Technical Walkthrough](https://img.youtube.com/vi/X6CbJljq1_M/maxresdefault.jpg)](https://www.youtube.com/watch?v=X6CbJljq1_M)
 
 ## Overview
 
