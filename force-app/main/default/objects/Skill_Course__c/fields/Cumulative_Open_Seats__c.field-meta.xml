@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cumulative_Open_Seats__c</fullName>
+    <label>Cumulative Open Seats</label>
+    <summarizedField>Skill_Session__c.Seats_Open__c</summarizedField>
+    <summaryForeignKey>Skill_Session__c.Skill_Course__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

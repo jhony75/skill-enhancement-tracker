@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Must_have_more_seats_available_than_take</fullName>
+    <active>true</active>
+    <errorConditionFormula>Total_Seats__c &lt; Seats_Taken__c</errorConditionFormula>
+    <errorMessage>Total seats cannot be lower than seats already taken.</errorMessage>
+</ValidationRule>

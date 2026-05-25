@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Skill_Course_Display__c</fullName>
+    <externalId>false</externalId>
+    <formula>Skill_Session__r.Skill_Course__r.Name</formula>
+    <label>Skill Course</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

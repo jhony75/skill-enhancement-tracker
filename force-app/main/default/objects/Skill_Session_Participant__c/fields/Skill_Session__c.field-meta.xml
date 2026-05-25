@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Skill_Session__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <label>Skill Session</label>
+    <referenceTo>Skill_Session__c</referenceTo>
+    <relationshipLabel>Skill Session Participants</relationshipLabel>
+    <relationshipName>Skill_Session_Participants</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

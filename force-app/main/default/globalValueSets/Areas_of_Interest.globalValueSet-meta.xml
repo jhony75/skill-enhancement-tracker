@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Accessibility</fullName>
+        <default>false</default>
+        <label>Accessibility</label>
+    </customValue>
+    <customValue>
+        <fullName>Communication</fullName>
+        <default>false</default>
+        <label>Communication</label>
+    </customValue>
+    <customValue>
+        <fullName>Data Analytics</fullName>
+        <default>false</default>
+        <label>Data Analytics</label>
+    </customValue>
+    <customValue>
+        <fullName>Healthcare Technology</fullName>
+        <default>false</default>
+        <label>Healthcare Technology</label>
+    </customValue>
+    <customValue>
+        <fullName>Leadership</fullName>
+        <default>false</default>
+        <label>Leadership</label>
+    </customValue>
+    <customValue>
+        <fullName>Programming</fullName>
+        <default>false</default>
+        <label>Programming</label>
+    </customValue>
+    <customValue>
+        <fullName>Project Management</fullName>
+        <default>false</default>
+        <label>Project Management</label>
+    </customValue>
+    <customValue>
+        <fullName>Salesforce</fullName>
+        <default>false</default>
+        <label>Salesforce</label>
+    </customValue>
+    <masterLabel>Areas of Interest</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

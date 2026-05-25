@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Skill_session_must_start_before_it_ends</fullName>
+    <active>true</active>
+    <errorConditionFormula>Session_End_Time__c &lt;=  Session_Start_Time__c</errorConditionFormula>
+    <errorMessage>Session end date should be greater than starting date</errorMessage>
+</ValidationRule>

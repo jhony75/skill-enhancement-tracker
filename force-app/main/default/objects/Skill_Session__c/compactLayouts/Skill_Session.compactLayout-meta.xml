@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Skill_Session</fullName>
+    <fields>Session_Start_Time__c</fields>
+    <fields>Skill_Course__c</fields>
+    <fields>Seats_Open__c</fields>
+    <fields>Training_Hours__c</fields>
+    <label>Skill Session</label>
+</CompactLayout>
