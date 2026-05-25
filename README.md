@@ -4,6 +4,64 @@ Salesforce take-home project for a corporate training and skill development use 
 
 The project implements a Salesforce-native application that allows employees to enroll in skill enhancement sessions, tracks attendance and training hours, manages provider eligibility, supports participant confirmation through approvals, and surfaces operational metrics through reports, dashboards, and Lightning pages.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Demo Videos](#demo-videos)
+  - [Functional Demo](#functional-demo)
+  - [Technical Walkthrough](#technical-walkthrough)
+- [Architecture Approach](#architecture-approach)
+- [Data Model](#data-model)
+  - [Standard Objects](#standard-objects)
+  - [Custom Objects](#custom-objects)
+- [Business Process](#business-process)
+  - [Self Sign-Up](#self-sign-up)
+  - [Third-Party Sign-Up](#third-party-sign-up)
+- [Automation](#automation)
+  - [Flows](#flows)
+  - [Approval Process](#approval-process)
+  - [Validation Rules](#validation-rules)
+- [Apex](#apex)
+- [Reporting](#reporting)
+  - [Custom Report Types](#custom-report-types)
+  - [Reports](#reports)
+  - [Dashboard](#dashboard)
+- [Lightning App](#lightning-app)
+- [Lightning Pages](#lightning-pages)
+- [Security](#security)
+- [Demo Data](#demo-data)
+- [Project Structure](#project-structure)
+- [Manifests](#manifests)
+  - [`manifest/skilltracker.xml`](#manifestskilltrackerxml)
+  - [`manifest/package.xml`](#manifestpackagexml)
+- [Deployment](#deployment)
+- [Retrieve](#retrieve)
+- [Design Notes](#design-notes)
+  - [Master-Detail Constraint](#master-detail-constraint)
+  - [Report Type Tradeoff](#report-type-tradeoff)
+  - [Flow vs Apex Boundary](#flow-vs-apex-boundary)
+- [Future Improvements](#future-improvements)
+- [Repository Hosting](#repository-hosting)
+- [Author](#author)
+
+## Demo Videos
+
+### Functional Demo
+
+A short walkthrough of the final user experience: navigating the Skill Enhancement Tracker app, reviewing providers/programs/courses/sessions, signing up for a session, checking participant status, and viewing reports/dashboard metrics.
+
+> Replace `YOUTUBE_VIDEO_ID` after uploading the video as unlisted.
+
+[![Functional Demo](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID)
+
+### Technical Walkthrough
+
+A technical explanation of the data model, automation strategy, approval process, reporting decisions, Lightning pages, security model, and Apex seat recalculation / participant integrity logic.
+
+> Replace `YOUTUBE_VIDEO_ID` after uploading the video as unlisted.
+
+[![Technical Walkthrough](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID)
+
 ## Overview
 
 TechWave Solutions wants to track employee participation in skill enhancement programs offered by approved training providers.
@@ -16,7 +74,7 @@ This implementation focuses on:
 - Reports and dashboards for training visibility
 - Lightning App and record page customization
 - Security and access through Permission Sets
-- A small Apex automation layer where platform constraints made declarative rollups impractical
+- A small Apex automation layer where platform constraints or cross-record integrity requirements made code the safer option
 
 ## Architecture Approach
 
@@ -36,7 +94,13 @@ Most business logic is handled with Salesforce-native features such as:
 - Reports and Dashboards
 - Permission Sets
 
-Apex is used only where it adds clear value: recalculating `Seats Taken` in a bulk-safe way after participant changes.
+Apex is used only where it adds clear value:
+
+- Recalculating `Seats Taken` in a bulk-safe way after participant changes.
+- Enforcing one participation record per user per session across UI, Flow, API, and Apex-created records.
+- Ensuring participant record names are consistently derived from the selected User, even when records are created through Apex/data scripts.
+
+This keeps the solution mostly declarative while still protecting critical data integrity rules at the platform layer.
 
 ## Data Model
 
@@ -211,7 +275,7 @@ The project includes validation rules for:
 
 ## Apex
 
-Apex is used for recalculating `Seats Taken`.
+Apex is used for participant data integrity and seat recalculation.
 
 Files:
 
@@ -221,7 +285,12 @@ force-app/main/default/classes/SkillSessionParticipantHandlerTest.cls
 force-app/main/default/triggers/SkillSessionParticipantTrigger.trigger
 ```
 
-The trigger recalculates seat usage after participant insert, update, delete, and undelete operations.
+The trigger handles:
+
+- Before insert/update participant validation.
+- Preventing the same user from being registered more than once for the same session.
+- Setting the participant record `Name` from the selected User.
+- After insert/update/delete/undelete recalculation of `Seats Taken`.
 
 The implementation is bulk-safe and uses aggregate queries to avoid row-by-row recalculation.
 
@@ -235,6 +304,25 @@ sf apex run test \
   --code-coverage \
   --wait 10
 ```
+
+## Demo Data
+
+The repository may include local Apex scripts under `scripts/` for clearing and recreating demo data.
+
+Typical usage:
+
+```bash
+sf apex run --target-org <alias> --file scripts/clearSeedData.apex
+sf apex run --target-org <alias> --file scripts/seedData.apex
+```
+
+The seed data is designed to support the functional demo, including:
+
+- Approved Skill Providers
+- Programs and Courses
+- Future and past Skill Sessions
+- Confirmed, Pending Approval, Completed, No-Show, and Canceled participation examples
+- A full session scenario where `Seats Open = 0`
 
 ## Reporting
 
@@ -357,6 +445,7 @@ force-app/main/default/tabs
 force-app/main/default/triggers
 force-app/main/default/workflows
 manifest
+scripts
 ```
 
 ## Manifests
@@ -455,6 +544,52 @@ However, participant status and confirmed/completed attendance are stored on `Sk
 
 This preserves reporting accuracy instead of forcing reports into a hierarchy that does not contain the required transactional fields.
 
+### Declarative + Apex Boundary
+
+The implementation keeps workflow routing declarative through Flow and Approval Processes, while using Apex for cross-record technical integrity.
+
+This split was intentional:
+
+- Flow remains easier for admins to inspect and modify for business process changes.
+- Apex provides a consistent enforcement point for duplicate prevention, participant naming, and aggregate seat recalculation across all entry points.
+
+## Future Improvements
+
+Given more time, the next improvements would be:
+
+1. **Friendlier Sign Me Up pre-checks**
+   - Check for an existing participant registration before attempting record creation.
+   - Show a friendly message if the user is already signed up.
+   - Keep Apex duplicate prevention as the backend safeguard.
+
+2. **Seat availability pre-check in the Screen Flow**
+   - Check `Seats Open` before creating a participant record.
+   - Show a clear “This session is full” message instead of relying only on backend validation.
+
+3. **Session timing pre-check**
+   - Prevent sign-up after a session has already started.
+   - Surface a friendly message in the Screen Flow.
+
+4. **Additional lifecycle validation**
+   - Prevent `Completed` or `No-Show` statuses before the session end time.
+   - Define a stricter status transition model if the process becomes more formal.
+
+5. **Improved admin observability**
+   - Add report/dashboard components for overbooked attempts, pending approvals aging, and provider utilization trends.
+   - Add an operational dashboard for the Skill Development Board.
+
+6. **More complete test data strategy**
+   - Convert the demo seed scripts into a documented data setup process.
+   - Add stable test personas for repeatable demos and regression testing.
+
+7. **More explicit Flow fault handling**
+   - Add fault paths with user-friendly messages in Screen Flows.
+   - Add administrative logging for unexpected automation failures.
+
+8. **Status governance**
+   - Move status transition rules into Custom Metadata if the process becomes more complex.
+   - This would allow admins to adjust lifecycle rules without modifying Apex.
+
 ## Repository Hosting
 
 Primary repository:
@@ -463,7 +598,9 @@ Primary repository:
 Forgejo
 ```
 
-GitHub is used as a mirror for visibility and redundancy. It is not the main git forge given the fails it had on the last few months.
+GitHub can be configured as a mirror for visibility and redundancy.
+
+Recommended setup:
 
 ```text
 Local repository → Forgejo → GitHub mirror
